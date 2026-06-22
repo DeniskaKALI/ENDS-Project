@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Progile Mobile",
+    "slug": "progile-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "progile",
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.progile.mobile",
+      "permissions": ["ACCESS_NETWORK_STATE"]
+    },
+    "ios": {
+      "bundleIdentifier": "com.progile.mobile"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.expo/
+.gradle/
+target/
+build/
+tools/
+backend/.m2/
+*.log
+backend/dev-keystore.p12
+smoke-report.png
+.DS_Store
