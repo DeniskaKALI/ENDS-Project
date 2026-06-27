@@ -95,6 +95,10 @@ gradlew assembleRelease
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
+- `GET /api/auth/me`
+- `PUT /api/auth/profile`
+- `PUT /api/auth/change-password`
+- `DELETE /api/auth/profile`
 - `GET /api/transport`
 - `GET /api/transport/{id}`
 - `GET /api/transport/search`
@@ -126,5 +130,4 @@ gradlew assembleRelease
 - `PUT /api/entities/{id}`
 - `DELETE /api/entities/{id}`
 - `GET /api/entities/search`
-
 

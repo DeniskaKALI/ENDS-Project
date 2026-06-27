@@ -14,15 +14,22 @@ const roles: Array<{ value: RoleName; label: string }> = [
 ];
 
 export function LoginScreen() {
-  const { login, isOnline } = useApp();
+  const { login, register, isOnline } = useApp();
   const [email, setEmail] = useState("dispatcher@progile.ru");
   const [password, setPassword] = useState("demo123");
+  const [fullName, setFullName] = useState("Иванов Иван Иванович");
+  const [company, setCompany] = useState("ООО \"Прогайл Логистика\"");
   const [role, setRole] = useState<RoleName>("DISPATCHER");
+  const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const submit = async () => {
     setLoading(true);
-    await login(email, password, role);
+    if (isRegisterMode) {
+      await register(fullName, email, password, role, company);
+    } else {
+      await login(email, password, role);
+    }
     setLoading(false);
   };
 
@@ -38,6 +45,20 @@ export function LoginScreen() {
 
       <Card mode="elevated" style={styles.card}>
         <Card.Content>
+          <View style={styles.modeRow}>
+            <Button mode={!isRegisterMode ? "contained-tonal" : "text"} onPress={() => setIsRegisterMode(false)}>
+              Вход
+            </Button>
+            <Button mode={isRegisterMode ? "contained-tonal" : "text"} onPress={() => setIsRegisterMode(true)}>
+              Регистрация
+            </Button>
+          </View>
+          {isRegisterMode && (
+            <>
+              <TextInput label="ФИО" value={fullName} onChangeText={setFullName} style={styles.input} />
+              <TextInput label="Компания" value={company} onChangeText={setCompany} style={styles.input} />
+            </>
+          )}
           <TextInput label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" style={styles.input} />
           <TextInput label="Пароль" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
           <Text variant="titleSmall" style={styles.roleTitle}>Роль</Text>
@@ -47,7 +68,7 @@ export function LoginScreen() {
             ))}
           </RadioButton.Group>
           <Button mode="contained" loading={loading} onPress={submit} style={styles.button}>
-            Войти
+            {isRegisterMode ? "Зарегистрироваться" : "Войти"}
           </Button>
         </Card.Content>
       </Card>
@@ -62,6 +83,7 @@ const styles = StyleSheet.create({
   heroText: { color: "white", marginTop: 8 },
   status: { color: "white", marginTop: 16 },
   card: { borderRadius: 24 },
+  modeRow: { flexDirection: "row", gap: 8, marginBottom: 12 },
   input: { marginBottom: 12, backgroundColor: "white" },
   roleTitle: { marginTop: 4, marginBottom: 4 },
   button: { marginTop: 16, borderRadius: 12 }

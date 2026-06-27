@@ -17,7 +17,10 @@ interface AppState {
   isOnline: boolean;
   lastSync: string;
   login: (email: string, password: string, role: RoleName) => Promise<void>;
+  register: (fullName: string, email: string, password: string, role: RoleName, company: string) => Promise<void>;
   logout: () => Promise<void>;
+  updateProfile: (profile: Pick<UserProfile, "fullName" | "role" | "company">) => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
   refresh: () => Promise<void>;
   saveVehicle: (vehicle: Omit<Vehicle, "id" | "lastUpdate"> & { id?: number }) => Promise<void>;
   deleteVehicle: (id: number) => Promise<void>;
@@ -36,6 +39,13 @@ function syncLabel() {
 
 function nextId(items: Array<{ id: number }>) {
   return Math.max(0, ...items.map((item) => item.id)) + 1;
+}
+
+function withAuthToken(payload: UserProfile, fallbackToken?: string): UserProfile {
+  return {
+    ...payload,
+    token: payload.token ?? fallbackToken ?? ""
+  };
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
@@ -75,7 +85,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (isOnline) {
       try {
         const response = await api.post("/auth/login", { email, password });
-        const nextUser = response.data as UserProfile;
+        const nextUser = withAuthToken(response.data as UserProfile);
         setUser(nextUser);
         setAuthToken(nextUser.token);
         await SecureStore.setItemAsync(TOKEN_KEY, nextUser.token);
@@ -97,10 +107,57 @@ export function AppProvider({ children }: { children: ReactNode }) {
     await SecureStore.setItemAsync(TOKEN_KEY, nextUser.token);
   };
 
+  const register: AppState["register"] = async (fullName, email, password, role, company) => {
+    if (isOnline) {
+      try {
+        const response = await api.post("/auth/register", { fullName, email, password, role, company });
+        const nextUser = withAuthToken(response.data as UserProfile);
+        setUser(nextUser);
+        setAuthToken(nextUser.token);
+        await SecureStore.setItemAsync(TOKEN_KEY, nextUser.token);
+        return;
+      } catch {
+        // The coursework app still supports demo/offline registration when the API is unavailable.
+      }
+    }
+
+    const nextUser: UserProfile = {
+      fullName,
+      email,
+      role,
+      company,
+      token: `offline-demo-${role.toLowerCase()}`
+    };
+    setUser(nextUser);
+    setAuthToken(nextUser.token);
+    await SecureStore.setItemAsync(TOKEN_KEY, nextUser.token);
+  };
+
   const logout = async () => {
     setUser(null);
     setAuthToken(undefined);
     await SecureStore.deleteItemAsync(TOKEN_KEY);
+  };
+
+  const updateProfile: AppState["updateProfile"] = async (profile) => {
+    if (!user) return;
+    const optimistic = { ...user, ...profile };
+    setUser(optimistic);
+    if (isOnline) {
+      const response = await api.put("/auth/profile", profile).catch(() => undefined);
+      if (response?.data) {
+        const nextUser = withAuthToken(response.data as UserProfile, user.token);
+        setUser(nextUser);
+        setAuthToken(nextUser.token);
+        await SecureStore.setItemAsync(TOKEN_KEY, nextUser.token);
+      }
+    }
+  };
+
+  const changePassword: AppState["changePassword"] = async (currentPassword, newPassword) => {
+    if (isOnline) {
+      await api.put("/auth/change-password", { currentPassword, newPassword });
+    }
   };
 
   const refresh = async () => {
@@ -179,7 +236,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isOnline,
       lastSync,
       login,
+      register,
       logout,
+      updateProfile,
+      changePassword,
       refresh,
       saveVehicle,
       deleteVehicle,

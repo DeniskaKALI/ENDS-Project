@@ -1,0 +1,437 @@
+{
+  "info": {
+    "name": "Progile API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Регистрация",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Аутентификация",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Текущий профиль",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/auth/me"
+          }
+        },
+        {
+          "name": "Обновление профиля",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/auth/profile",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Смена пароля",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/auth/change-password",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Удаление профиля",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/auth/profile"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Entities",
+      "item": [
+        {
+          "name": "Получение списка",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/entities"
+          }
+        },
+        {
+          "name": "Получение по ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/entities/{id}"
+          }
+        },
+        {
+          "name": "Создание",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/entities",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Обновление",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/entities/{id}",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Удаление",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/entities/{id}"
+          }
+        },
+        {
+          "name": "Поиск с фильтрацией",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/entities/search"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transport",
+      "item": [
+        {
+          "name": "Список транспорта",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/transport"
+          }
+        },
+        {
+          "name": "Транспорт по ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/transport/{id}"
+          }
+        },
+        {
+          "name": "Поиск транспорта",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/transport/search"
+          }
+        },
+        {
+          "name": "Создание транспорта",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/transport",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Обновление транспорта",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/transport/{id}",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Статус транспорта",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/transport/{id}/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Удаление транспорта",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/transport/{id}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Routes",
+      "item": [
+        {
+          "name": "Список маршрутов",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/routes"
+          }
+        },
+        {
+          "name": "Маршрут по ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/routes/{id}"
+          }
+        },
+        {
+          "name": "Создание маршрута",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/routes",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Обновление маршрута",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/routes/{id}",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Статус маршрута",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/routes/{id}/status",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Удаление маршрута",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/routes/{id}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tracking",
+      "item": [
+        {
+          "name": "Текущие GPS-снимки",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/tracking/current"
+          }
+        },
+        {
+          "name": "Добавление GPS-снимка",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/tracking",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Генерация отчета",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/reports",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Получение отчета",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/reports/{id}"
+          }
+        },
+        {
+          "name": "Экспорт отчета",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/reports/{id}/export"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Список комментариев",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/comments"
+          }
+        },
+        {
+          "name": "Создание комментария",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/comments",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

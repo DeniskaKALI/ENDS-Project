@@ -1,0 +1,640 @@
+# ЛабораторнаяРабота_ПИЖ7.docx
+File: C:\Users\Дениска\Desktop\Программнаяинженерия\ЛабораторнаяРабота_ПИЖ7.docx
+
+## Paragraphs
+[Normal] МИНИCTEPCTBO НАУКИ И ВЫСШЕГО ОБРАЗОВАНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ
+[Normal] Федеральное государственное автономное образовательное учреждение
+[Normal] высшего образования
+[Normal] «СЕВЕРО-КАВКАЗСКИЙ ФЕДЕРАЛЬНЫЙ УНИВЕРСИТЕТ»
+[Normal] Институт перспективной инженерии
+[Normal] Департамент цифровых робототехнических систем и электроники
+[Normal] Отчет к лабораторной работе № 7
+[Normal] Тема: Разработка веб-интерфейса (React
+[Normal] Frontend + Java Backend)
+[Normal] Дисциплина: «Программная инженерия»
+[Normal] Ставрополь 2026
+[Normal] Цель работы: Разработать современный веб-интерфейс для программной системы на основе спроектированной архитектуры PCMEF, используя React для построения пользовательского интерфейса и реализованный ранее Java бэкенд (Control/Mediator/Entity/Foundation) через REST API
+[Normal] Вариант: Курсовой проект – система мониторинга транспорта
+[Heading 1] Сводка первичных задач
+[Heading 2] Краткое описание проекта
+[Normal] Разработка Desktop системы управления разработкой проектов для автоматизации учета задач, распределение задач между персоналом и получение метрик диапазонных итогов разработки. Проект направлен на повышение точности и скорости операций, минимизацию ошибок и потерь, а также улучшение прозрачности процессов разработки.
+[Heading 1] Структура проекта
+[Normal] Frontend:
+[Normal] src
+[Normal] ├── App.jsx
+[Normal] ├── Providers.jsx
+[Normal] ├── api
+[Normal] │   └── index.js
+[Normal] ├── assets
+[Normal] │   └── background.jpg
+[Normal] ├── components
+[Normal] │   ├── auth
+[Normal] │   │   └── PrivateRoute.jsx
+[Normal] │   ├── company
+[Normal] │   │   ├── Company_CoworkerCard.jsx
+[Normal] │   │   ├── Company_CoworkerCard.module.css
+[Normal] │   │   ├── Company_ProjectCard.jsx
+[Normal] │   │   └── Company_ProjectCard.module.css
+[Normal] │   ├── layout
+[Normal] │   │   ├── Layout.jsx
+[Normal] │   │   ├── Layout.module.css
+[Normal] │   │   ├── Sidebar.jsx
+[Normal] │   │   └── Sidebar.module.css
+[Normal] │   ├── projects
+[Normal] │   │   ├── Board.jsx
+[Normal] │   │   ├── Board.module.css
+[Normal] │   │   ├── ProjectCard.jsx
+[Normal] │   │   ├── ProjectCard.module.css
+[Normal] │   │   ├── Task.jsx
+[Normal] │   │   └── Task.module.css
+[Normal] │   └── ui
+[Normal] │       ├── Modal.jsx
+[Normal] │       ├── Modal.module.css
+[Normal] │       └── elements
+[Normal] │           ├── Button.jsx
+[Normal] │           ├── Button.module.css
+[Normal] │           ├── Input.jsx
+[Normal] │           └── Input.module.css
+[Normal] ├── context
+[Normal] │   ├── CompanyContext.jsx
+[Normal] │   ├── ProjectContext.jsx
+[Normal] │   └── UserContext.jsx
+[Normal] ├── main.jsx
+[Normal] ├── pages
+[Normal] │   ├── LoginPage.jsx
+[Normal] │   ├── LoginPage.module.css
+[Normal] │   ├── OAuthRedirect.jsx
+[Normal] │   ├── RegPage.jsx
+[Normal] │   ├── RegPage.module.css
+[Normal] │   └── layoutPages
+[Normal] │       ├── CompanyPage.jsx
+[Normal] │       ├── CompanyPage.module.css
+[Normal] │       ├── ProfilePage.jsx
+[Normal] │       ├── ProfilePage.module.css
+[Normal] │       ├── ProjectPage.jsx
+[Normal] │       ├── ProjectPage.module.css
+[Normal] │       ├── ProjectsSelectionPage.jsx
+[Normal] │       └── ProjectsSelectionPage.module.css
+[Normal] └── styles
+[Normal] ├── global.css
+[Normal] └── tokens
+[Normal] ├── colors.css
+[Normal] ├── link.css
+[Normal] └── semantic.css
+[Heading 1] Разработка REST API (Java Spring Boot)
+[Normal] POM.xml
+[Normal] <?xml version="1.0" encoding="UTF-8"?>
+[Normal] <project xmlns="http://maven.apache.org/POM/4.0.0"
+[Normal] xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+[Normal] xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+[Normal] https://maven.apache.org/xsd/maven-4.0.0.xsd">
+[Normal] <modelVersion>4.0.0</modelVersion>
+[Normal] <!-- Spring Boot stable version -->
+[Normal] <parent>
+[Normal] <groupId>org.springframework.boot</groupId>
+[Normal] <artifactId>spring-boot-starter-parent</artifactId>
+[Normal] <version>3.3.5</version>
+[Normal] <relativePath/>
+[Normal] </parent>
+[Normal] <groupId>com.progile</groupId>
+[Normal] <artifactId>progile-backend</artifactId>
+[Normal] <version>0.0.1-SNAPSHOT</version>
+[Normal] <name>Progile</name>
+[Normal] <description>Progile Transport Monitoring System - Backend</description>
+[Normal] <!-- Java version -->
+[Normal] <properties>
+[Normal] <java.version>17</java.version>
+[Normal] </properties>
+[Normal] <dependencies>
+[Normal] <!-- Web -->
+[Normal] <dependency>
+[Normal] <groupId>org.springframework.boot</groupId>
+[Normal] <artifactId>spring-boot-starter-web</artifactId>
+[Normal] </dependency>
+[Normal] <!-- OAuth2 Client -->
+[Normal] <dependency>
+[Normal] <groupId>org.springframework.boot</groupId>
+[Normal] <artifactId>spring-boot-starter-oauth2-client</artifactId>
+[Normal] </dependency>
+[Normal] <!-- JPA -->
+[Normal] <dependency>
+[Normal] <groupId>org.springframework.boot</groupId>
+[Normal] <artifactId>spring-boot-starter-data-jpa</artifactId>
+[Normal] </dependency>
+[Normal] <!-- Validation -->
+[Normal] <dependency>
+[Normal] <groupId>org.springframework.boot</groupId>
+[Normal] <artifactId>spring-boot-starter-validation</artifactId>
+[Normal] </dependency>
+[Normal] <!-- Security -->
+[Normal] <dependency>
+[Normal] <groupId>org.springframework.boot</groupId>
+[Normal] <artifactId>spring-boot-starter-security</artifactId>
+[Normal] </dependency>
+[Normal] <!-- PostgreSQL -->
+[Normal] <dependency>
+[Normal] <groupId>org.postgresql</groupId>
+[Normal] <artifactId>postgresql</artifactId>
+[Normal] <scope>runtime</scope>
+[Normal] </dependency>
+[Normal] <!-- JWT -->
+[Normal] <dependency>
+[Normal] <groupId>io.jsonwebtoken</groupId>
+[Normal] <artifactId>jjwt-api</artifactId>
+[Normal] <version>0.12.6</version>
+[Normal] </dependency>
+[Normal] <dependency>
+[Normal] <groupId>io.jsonwebtoken</groupId>
+[Normal] <artifactId>jjwt-impl</artifactId>
+[Normal] <version>0.12.6</version>
+[Normal] <scope>runtime</scope>
+[Normal] </dependency>
+[Normal] <dependency>
+[Normal] <groupId>io.jsonwebtoken</groupId>
+[Normal] <artifactId>jjwt-jackson</artifactId>
+[Normal] <version>0.12.6</version>
+[Normal] <scope>runtime</scope>
+[Normal] </dependency>
+[Normal] <!-- Lombok -->
+[Normal] <dependency>
+[Normal] <groupId>org.projectlombok</groupId>
+[Normal] <artifactId>lombok</artifactId>
+[Normal] <version>1.18.32</version>
+[Normal] <scope>provided</scope>
+[Normal] </dependency>
+[Normal] <!-- ModelMapper -->
+[Normal] <dependency>
+[Normal] <groupId>org.modelmapper</groupId>
+[Normal] <artifactId>modelmapper</artifactId>
+[Normal] <version>3.2.0</version>
+[Normal] </dependency>
+[Normal] <!-- Apache POI (для экспорта отчётов) -->
+[Normal] <dependency>
+[Normal] <groupId>org.apache.poi</groupId>
+[Normal] <artifactId>poi-ooxml</artifactId>
+[Normal] <version>5.2.5</version>
+[Normal] </dependency>
+[Normal] <!-- Mail -->
+[Normal] <dependency>
+[Normal] <groupId>org.springframework.boot</groupId>
+[Normal] <artifactId>spring-boot-starter-mail</artifactId>
+[Normal] </dependency>
+[Normal] <!-- Thymeleaf (для HTML-писем) -->
+[Normal] <dependency>
+[Normal] <groupId>org.springframework.boot</groupId>
+[Normal] <artifactId>spring-boot-starter-thymeleaf</artifactId>
+[Normal] </dependency>
+[Normal] <!-- Tests -->
+[Normal] <dependency>
+[Normal] <groupId>org.springframework.boot</groupId>
+[Normal] <artifactId>spring-boot-starter-test</artifactId>
+[Normal] <scope>test</scope>
+[Normal] </dependency>
+[Normal] <!-- Jackson -->
+[Normal] <dependency>
+[Normal] <groupId>com.fasterxml.jackson.core</groupId>
+[Normal] <artifactId>jackson-databind</artifactId>
+[Normal] </dependency>
+[Normal] <dependency>
+[Normal] <groupId>com.fasterxml.jackson.datatype</groupId>
+[Normal] <artifactId>jackson-datatype-jsr310</artifactId>
+[Normal] </dependency>
+[Normal] <!-- OpenAPI (Swagger) -->
+[Normal] <dependency>
+[Normal] <groupId>org.springdoc</groupId>
+[Normal] <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+[Normal] <version>2.5.0</version>
+[Normal] <scope>compile</scope>
+[Normal] </dependency>
+[Normal] <!-- Dotenv (для переменных окружения) -->
+[Normal] <dependency>
+[Normal] <groupId>me.paulschwarz</groupId>
+[Normal] <artifactId>spring-dotenv</artifactId>
+[Normal] <version>4.0.0</version>
+[Normal] </dependency>
+[Normal] </dependencies>
+[Normal] <build>
+[Normal] <plugins>
+[Normal] <!-- Spring Boot Maven Plugin -->
+[Normal] <plugin>
+[Normal] <groupId>org.springframework.boot</groupId>
+[Normal] <artifactId>spring-boot-maven-plugin</artifactId>
+[Normal] </plugin>
+[Normal] <!-- Maven Compiler Plugin -->
+[Normal] <plugin>
+[Normal] <groupId>org.apache.maven.plugins</groupId>
+[Normal] <artifactId>maven-compiler-plugin</artifactId>
+[Normal] <version>3.11.0</version>
+[Normal] <configuration>
+[Normal] <source>17</source>
+[Normal] <target>17</target>
+[Normal] </configuration>
+[Normal] </plugin>
+[Normal] </plugins>
+[Normal] </build>
+[Normal] </project>
+[Normal] import axios from 'axios';
+[Normal] import toast from 'react-hot-toast';
+[Normal] export const API_URL = '/api';
+[Normal] export const AUTH_URL = '/auth';
+[Normal] const api = axios.create({
+[Normal] baseURL: API_URL
+[Normal] });
+[Normal] const authApi = axios.create({
+[Normal] baseURL: AUTH_URL
+[Normal] });
+[Normal] // Request interceptor для добавления токена
+[Normal] api.interceptors.request.use(
+[Normal] (config) => {
+[Normal] const token = localStorage.getItem('accessToken');
+[Normal] if (token) {
+[Normal] config.headers = {
+[Normal] ...config.headers,
+[Normal] Authorization: `Bearer ${token}`,
+[Normal] };
+[Normal] }
+[Normal] return config;
+[Normal] },
+[Normal] (error) => Promise.reject(error)
+[Normal] );
+[Normal] // Response interceptor для обработки 401
+[Normal] api.interceptors.response.use(
+[Normal] (response) => response,
+[Normal] (error) => {
+[Normal] return Promise.reject(error);
+[Normal] }
+[Normal] );
+[Normal] // ===================== Аутентификация =====================
+[Normal] export const authService = {
+[Normal] login: (data) => authApi.post('/login', data),
+[Normal] signup: (data) => authApi.post('/signup', data),
+[Normal] };
+[Normal] // ===================== Пользователи =====================
+[Normal] export const userService = {
+[Normal] getProfile: () => api.get('/users/profile'),
+[Normal] updateProfile: (name, username, email, newPassword, confirmPassword) =>
+[Normal] api.put('/users/profile', { name, username, email, newPassword, confirmPassword }),
+[Normal] changePassword: (data) => api.put('/users/change-password', data),
+[Normal] forgotPassword: (email) => api.post(`/users/forgot-password?email=${email}`),
+[Normal] deleteAccount: () => api.delete('/users/profile')
+[Normal] };
+[Normal] // ===================== Компании =====================
+[Normal] export const companyService = {
+[Normal] getCompany: () => api.get('/company'),
+[Normal] createCompany: (name, taxId) => api.post('/company', { name, taxId }),
+[Normal] addUserToCompany: (email) => api.post('/company/users', { email }),
+[Normal] removeUserFromCompany: (userId) => api.delete(`/company/users/${userId}`),
+[Normal] updateCompany: (name, taxId) => api.put('/company', { name, taxId }),
+[Normal] deleteCompany: () => api.delete('/company')
+[Normal] };
+[Normal] // ===================== Парки транспортных средств (Fleet) =====================
+[Normal] export const fleetService = {
+[Normal] getAllFleets: () => api.get('/fleets'),
+[Normal] getFleetById: (id) => api.get(`/fleets/${id}`),
+[Normal] createFleet: (name) => api.post('/fleets', { name }),
+[Normal] deleteFleet: (id) => api.delete(`/fleets/${id}`)
+[Normal] };
+[Normal] // ===================== Группы маршрутов (RouteGroup) =====================
+[Normal] export const routeGroupService = {
+[Normal] getGroupsByFleet: (fleetId) => api.get(`/fleets/${fleetId}/groups`),
+[Normal] createGroup: (fleetId, name, description) =>
+[Normal] api.post(`/fleets/${fleetId}/groups`, { name, description }),
+[Normal] updateGroup: (groupId, name, description) =>
+[Normal] api.put(`/fleets/groups/${groupId}`, { name, description }),
+[Normal] deleteGroup: (groupId) => api.delete(`/fleets/groups/${groupId}`)
+[Normal] };
+[Normal] // ===================== Транспортные средства =====================
+[Normal] export const transportService = {
+[Normal] getAllTransports: (companyId) =>
+[Normal] api.get('/transport', { params: { companyId } }),
+[Normal] getTransport: (id) => api.get(`/transport/${id}`),
+[Normal] registerTransport: (plateNumber, model, companyId) =>
+[Normal] api.post('/transport', { plateNumber, model, companyId }),
+[Normal] updateTransportStatus: (id, status) =>
+[Normal] api.patch(`/transport/${id}/status`, { status }),
+[Normal] assignDriver: (id, driverName) =>
+[Normal] api.patch(`/transport/${id}/driver`, { driverName })
+[Normal] };
+[Normal] // ===================== Маршруты =====================
+[Normal] export const routeService = {
+[Normal] getRoutes: (params) => api.get('/routes', { params }), // ?transportId=... &groupId=...
+[Normal] getRoute: (id) => api.get(`/routes/${id}`),
+[Normal] createRoute: (name, startPoint, endPoint, transportId, groupId) =>
+[Normal] api.post('/routes', { name, startPoint, endPoint, transportId, groupId }),
+[Normal] updateRoute: (id, data) => api.put(`/routes/${id}`, data),
+[Normal] deleteRoute: (id) => api.delete(`/routes/${id}`),
+[Normal] updateRouteStatus: (id, status) =>
+[Normal] api.patch(`/routes/${id}/status`, { status })
+[Normal] };
+[Normal] // ===================== Телеметрия (трекинг) =====================
+[Normal] export const trackingService = {
+[Normal] getHistory: (transportId, from, to) =>
+[Normal] api.get('/tracking/history', { params: { transportId, from, to } }),
+[Normal] getCurrentLocation: (transportId) =>
+[Normal] api.get('/tracking/current', { params: { transportId } }),
+[Normal] // Отправка данных с GPS (обычно вызывается автоматически)
+[Normal] sendSnapshot: (transportId, latitude, longitude, speed) =>
+[Normal] api.post('/tracking', { transportId, latitude, longitude, speed })
+[Normal] };
+[Normal] // ===================== Отчёты =====================
+[Normal] export const reportService = {
+[Normal] generateReport: (routeId) => api.post('/reports', { routeId }),
+[Normal] getReport: (id) => api.get(`/reports/${id}`),
+[Normal] exportReport: (id, format) =>
+[Normal] api.get(`/reports/${id}/export`, { params: { format }, responseType: 'blob' })
+[Normal] };
+[Normal] // ===================== Комментарии =====================
+[Normal] export const commentService = {
+[Normal] getCommentsByTransport: (transportId) => api.get(`/comments/transport/${transportId}`),
+[Normal] getCommentsByRoute: (routeId) => api.get(`/comments/route/${routeId}`),
+[Normal] addComment: (text, transportId, routeId) =>
+[Normal] api.post('/comments', { text, transportId, routeId })
+[Normal] };
+[Normal] export default api;
+[Heading 1] Ключевые компоненты
+[Normal] import { CompanyProvider } from "./context/CompanyContext";
+[Normal] import { UserProvider } from "./context/UserContext";
+[Normal] import { ProjectProvider } from "./context/ProjectContext";
+[Normal] export const Providers = ({ children }) => {
+[Normal] return (
+[Normal] <UserProvider>
+[Normal] <CompanyProvider>
+[Normal] <ProjectProvider>
+[Normal] {children}
+[Normal] </ProjectProvider>
+[Normal] </CompanyProvider>
+[Normal] </UserProvider>
+[Normal] );
+[Normal] };
+[Normal] import { StrictMode } from 'react';
+[Normal] import { createRoot } from 'react-dom/client';
+[Normal] import { BrowserRouter } from 'react-router-dom';
+[Normal] import { Toaster } from 'react-hot-toast';
+[Normal] import { Providers } from './Providers';
+[Normal] import App from './App.jsx';
+[Normal] import './styles/global.css'
+[Normal] createRoot(document.getElementById('root')).render(
+[Normal] <StrictMode>
+[Normal] <BrowserRouter>
+[Normal] <Providers>
+[Normal] <App />
+[Normal] <Toaster
+[Normal] position="bottom-right"
+[Normal] toastOptions={{
+[Normal] duration: 3000,
+[Normal] style: {
+[Normal] background: '#102A20',
+[Normal] color: '#e5e7eb',
+[Normal] border: '1px solid #236e4f',
+[Normal] },
+[Normal] success: {
+[Normal] iconTheme: {
+[Normal] primary: '#1f614b',
+[Normal] secondary: '#fff',
+[Normal] },
+[Normal] },
+[Normal] error: {
+[Normal] iconTheme: {
+[Normal] primary: '#8f2a2a',
+[Normal] secondary: '#fff',
+[Normal] },
+[Normal] },
+[Normal] }}
+[Normal] />
+[Normal] </Providers>
+[Normal] </BrowserRouter>
+[Normal] </StrictMode>,
+[Normal] );
+[Normal] import { Routes, Route, Navigate } from 'react-router-dom';
+[Normal] import { Layout } from './components/layout/Layout';
+[Normal] import { PrivateRoute } from './components/auth/PrivateRoute';
+[Normal] import LoginPage from "./pages/LoginPage"
+[Normal] import RegPage from "./pages/RegPage"
+[Normal] // // IMPORTANT: Add this import
+[Normal] import OAuthRedirect from './pages/OAuthRedirect';
+[Normal] import { CompanyPage } from './pages/layoutPages/CompanyPage';
+[Normal] import { ProfilePage } from './pages/layoutPages/ProfilePage';
+[Normal] import { ProjectsSelectionPage } from './pages/layoutPages/ProjectsSelectionPage';
+[Normal] import { ProjectsPage } from './pages/layoutPages/ProjectPage';
+[Normal] function App() {
+[Normal] return (<Routes>
+[Normal] {/* ✅ OAuth route MUST be public and ABOVE PrivateRoute */}
+[Normal] <Route path="/oauth2/redirect" element={<OAuthRedirect />} />
+[Normal] <Route path="/login" element={<LoginPage />} />
+[Normal] <Route path="/signup" element={<RegPage />} />
+[Normal] {/* Protected Routes */}
+[Normal] <Route element={<PrivateRoute />}>
+[Normal] <Route element={<Layout />}>
+[Normal] <Route path="/profile" element={<ProfilePage />} />
+[Normal] </Route>
+[Normal] </Route>
+[Normal] <Route element={<PrivateRoute />}>
+[Normal] <Route element={<Layout />}>
+[Normal] <Route path="/company" element={<CompanyPage />} />
+[Normal] </Route>
+[Normal] </Route>
+[Normal] <Route element={<PrivateRoute />}>
+[Normal] <Route element={<Layout />}>
+[Normal] <Route path="/projects" element={<ProjectsSelectionPage />} />
+[Normal] </Route>
+[Normal] </Route>
+[Normal] <Route element={<PrivateRoute />}>
+[Normal] <Route element={<Layout />}>
+[Normal] <Route path="/project/:id" element={<ProjectsPage />} />
+[Normal] </Route>
+[Normal] </Route>
+[Normal] {/* Fallback */}
+[Normal] <Route path="*" element={<Navigate to="/profile" replace />} />
+[Normal] </Routes>
+[Normal] );
+[Normal] }
+[Normal] export default App;
+[Normal] import { useState } from 'react';
+[Normal] import { Outlet } from 'react-router-dom';
+[Normal] import { Sidebar } from './Sidebar';
+[Normal] import layout from './Layout.module.css';
+[Normal] export const Layout = () => {
+[Normal] const [mobileMenuOpen, setMobileMenuOpen] = useState(true);
+[Normal] return (
+[Normal] <div className={layout.container}>
+[Normal] <Sidebar isOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
+[Normal] <div className={layout.content}>
+[Normal] <main className={layout.main}>
+[Normal] <div className={layout.outlet}>
+[Normal] <Outlet />
+[Normal] </div>
+[Normal] </main>
+[Normal] </div>
+[Normal] <div className={layout.bg}></div>
+[Normal] </div>
+[Normal] );
+[Normal] };
+[Normal] import { NavLink } from 'react-router-dom';
+[Normal] import sidebar from './Sidebar.module.css';
+[Normal] import { useProject } from '../../context/ProjectContext';
+[Normal] export const Sidebar = ({ isOpen, setMobileMenuOpen }) => {
+[Normal] const { currentProject } = useProject();
+[Normal] const NAV_ITEMS_PROFILE = [
+[Normal] { path: '/profile', label: 'Профиль' },
+[Normal] { path: '/projects', label: 'Проекты' },
+[Normal] { path: '/company', label: 'Ваша Компания' },
+[Normal] ];
+[Normal] return (
+[Normal] <div className={sidebar.container}>
+[Normal] <header className={sidebar.header}>
+[Normal] KanbaNice
+[Normal] </header>
+[Normal] <nav className={sidebar.nav}>
+[Normal] {NAV_ITEMS_PROFILE.map((item) => {
+[Normal] return (
+[Normal] <NavLink
+[Normal] key={item.path}
+[Normal] to={item.path}
+[Normal] onClick={() => setMobileMenuOpen(false)}
+[Normal] className={({ isActive }) =>
+[Normal] isActive
+[Normal] ? sidebar.navActive
+[Normal] : sidebar.nav
+[Normal] }
+[Normal] >
+[Normal] <span className={sidebar.navLinkText}>{item.label}</span>
+[Normal] </NavLink>
+[Normal] );
+[Normal] })}
+[Normal] </nav>
+[Normal] </div>
+[Normal] );
+[Normal] };
+[Heading 1] Стилизация
+[Normal] /* progile-components.css – стили для компонентов Progile */
+[Normal] /* Статусы транспортных средств */
+[Normal] .status-moving {
+[Normal] background-color: var(--green-500);
+[Normal] color: white;
+[Normal] }
+[Normal] .status-stopped {
+[Normal] background-color: var(--yellow-500);
+[Normal] color: #1f2937;
+[Normal] }
+[Normal] .status-off-route {
+[Normal] background-color: var(--red-500);
+[Normal] color: white;
+[Normal] }
+[Normal] .status-maintenance {
+[Normal] background-color: var(--gray-500);
+[Normal] color: white;
+[Normal] }
+[Normal] /* Карта и трекинг */
+[Normal] .map-container {
+[Normal] height: 500px;
+[Normal] width: 100%;
+[Normal] border-radius: 12px;
+[Normal] overflow: hidden;
+[Normal] border: 1px solid var(--gray-200);
+[Normal] }
+[Normal] .tracking-snapshot {
+[Normal] background: var(--white-100);
+[Normal] border-left: 4px solid var(--blue-500);
+[Normal] padding: 12px;
+[Normal] margin-bottom: 8px;
+[Normal] border-radius: 8px;
+[Normal] }
+[Normal] /* Отчёты */
+[Normal] .report-card {
+[Normal] background: white;
+[Normal] border-radius: 16px;
+[Normal] box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+[Normal] padding: 20px;
+[Normal] transition: transform 0.2s;
+[Normal] }
+[Normal] .report-card:hover {
+[Normal] transform: translateY(-2px);
+[Normal] }
+[Normal] Link.css
+[Normal] :root {
+[Normal] --bg-forest: url("../../assets/background.jpg")
+[Normal] }
+[Normal] Semantic.css
+[Normal] /* semantic.css – семантические переменные для Progile (синяя тема) */
+[Normal] :root {
+[Normal] /* Backgrounds */
+[Normal] --color-background: var(--gray-50);
+[Normal] --color-background-secondary: var(--white-500);
+[Normal] --color-background-tertiary: var(--gray-100);
+[Normal] --color-background-dark: var(--gray-800);
+[Normal] --color-background-sidebar: var(--gray-900);
+[Normal] /* Buttons – Primary (blue) */
+[Normal] --color-button-primary: var(--blue-600);
+[Normal] --color-button-primary-border: var(--blue-700);
+[Normal] --color-button-primary-hover: var(--blue-700);
+[Normal] --color-button-primary-active: var(--blue-800);
+[Normal] /* Buttons – Cancel / Danger */
+[Normal] --color-button-cancel: var(--gray-400);
+[Normal] --color-button-cancel-border: var(--gray-500);
+[Normal] --color-button-cancel-hover: var(--gray-500);
+[Normal] --color-button-cancel-active: var(--gray-600);
+[Normal] --color-button-delete: var(--red-500);
+[Normal] --color-button-delete-border: var(--red-600);
+[Normal] --color-button-delete-hover: var(--red-600);
+[Normal] --color-button-delete-active: var(--red-700);
+[Normal] --color-button-close: var(--gray-400);
+[Normal] --color-button-close-border: var(--gray-500);
+[Normal] --color-button-close-hover: var(--gray-500);
+[Normal] --color-button-close-active: var(--gray-600);
+[Normal] /* Text colors */
+[Normal] --color-text-primary: var(--gray-900);
+[Normal] --color-text-secondary: var(--gray-600);
+[Normal] --color-text-tertiary: var(--gray-500);
+[Normal] --color-text-inverted: var(--white-100);
+[Normal] --color-text-link: var(--blue-600);
+[Normal] /* Borders */
+[Normal] --color-border: var(--gray-200);
+[Normal] --color-border-hover: var(--gray-300);
+[Normal] --color-border-focus: var(--blue-400);
+[Normal] /* Accent / Primary */
+[Normal] --color-primary: var(--blue-600);
+[Normal] --color-primary-hover: var(--blue-700);
+[Normal] --color-primary-light: var(--blue-100);
+[Normal] --color-primary-dark: var(--blue-800);
+[Normal] /* UI states */
+[Normal] --color-hover: var(--gray-100);
+[Normal] --color-active: var(--gray-200);
+[Normal] --color-disabled: var(--gray-300);
+[Normal] /* Shadows (light) */
+[Normal] --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+[Normal] --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+[Normal] --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+[Normal] /* Toast specific */
+[Normal] --toast-bg: var(--gray-800);
+[Normal] --toast-color: var(--white-100);
+[Normal] --toast-border: var(--gray-600);
+[Normal] --toast-success-icon: var(--green-500);
+[Normal] --toast-error-icon: var(--red-500);
+[Normal] --toast-success-bg: rgba(34, 197, 94, 0.1);
+[Normal] --toast-error-bg: rgba(239, 68, 68, 0.1);
+[Normal] }
+[Heading 1] Работа приложения
+[No Spacing] Рисунок 1 – главная
+[No Spacing] Рисунок 2 - Страница тратспорт
+[No Spacing] Рисунок 3 - Страница маршрута
+[No Spacing] Рисунок 4 - Страница выбора маршрута
+[No Spacing] Рисунок 5 - Страница отчета
+[No Spacing] Рисунок 6 – страница профиль
+[Heading 1] Заключение
+[Normal] В ходе выполнения работы был разработан веб-интерфейс для программной системы на основе спроектированной архитектуры PCMEF, используя React для построения пользовательского интерфейса и реализованный ранее Java бэкенд (Control/Mediator/Entity/Foundation) через REST API
+[Heading 1] Ответы на контрольные вопросы:
+[List Paragraph] Взаимодействие React с Java-бэкендом организуется через HTTP-запросы. React отправляет запросы к API, реализованному на Spring Boot, получает данные в формате JSON и отображает их в интерфейсе.
+[List Paragraph] REST API — это способ обмена данными между клиентом и сервером через HTTP-методы (GET, POST, PUT, DELETE). В проекте React обращается к REST API для получения, создания, изменения и удаления данных.
+[List Paragraph] CORS позволяет браузеру выполнять запросы между разными доменами. В Spring Boot CORS настраивается через аннотацию @CrossOrigin или глобальную конфигурацию, где указывается адрес React-приложения.
+[List Paragraph] Аутентификация с JSON Web Token реализуется так: пользователь отправляет логин и пароль, сервер возвращает JWT, React сохраняет токен в localStorage или sessionStorage и использует его для последующих запросов.
+[List Paragraph] Axios interceptors позволяют автоматически добавлять JWT в заголовок Authorization перед каждым запросом, что избавляет от необходимости вручную передавать токен.
+[List Paragraph] React Router отвечает за маршрутизацию в одностраничном приложении. С его помощью задаются URL-пути и соответствующие им компоненты.
+[List Paragraph] Защита маршрутов реализуется через компонент PrivateRoute, который проверяет наличие JWT. Если пользователь не авторизован, происходит перенаправление на страницу входа.
+[List Paragraph] React Hook Form упрощает работу с формами: хранит значения полей, выполняет валидацию и обрабатывает отправку данных без большого количества useState.
+[List Paragraph] Асинхронные запросы выполняются внутри useEffect, а результат сохраняется через useState. После получения ответа React автоматически обновляет интерфейс.
+[List Paragraph] Индикатор загрузки отображается с помощью состояния loading. Перед отправкой запроса оно устанавливается в true, после завершения — в false, и в зависимости от значения показывается спиннер или основной контент.
+
+## Tables
+### Table 1
+ |  | Выполнил:
+ |  | Студент группы ПИЖ-б-о-23-1 направление подготовки 09.03.04 «Программная инженерия» | Островерхов Денис Юрьевич | Проверил: | Ассистент ДЦРСИЭ | Потапов И.Р.

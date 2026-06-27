@@ -3,6 +3,7 @@ export type VehicleStatus = "MOVING" | "STOPPED" | "OFF_ROUTE" | "MAINTENANCE";
 export type RouteStatus = "PLANNED" | "ACTIVE" | "COMPLETED";
 
 export interface UserProfile {
+  id?: number;
   fullName: string;
   email: string;
   role: RoleName;
